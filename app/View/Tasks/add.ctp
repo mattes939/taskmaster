@@ -1,27 +1,27 @@
-<div class="tasks form">
-<?php echo $this->Form->create('Task'); ?>
-	<fieldset>
-		<legend><?php echo __('Add Task'); ?></legend>
-	<?php
-//		echo $this->Form->input('lft');
-//		echo $this->Form->input('rght');
-//		echo $this->Form->input('parent_id');
-		echo $this->Form->input('name');
-//		echo $this->Form->input('User');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<?php 
+$headline = 'Nový úkol';
+$backLink = ['controller' => 'tasks', 'action' => 'index'];
+if(!empty($parentTask)){
+    $headline = '['. $parentTask['Task']['name'] . '] nový podúkol';
+    $backLink['action'] = 'view';
+    $backLink[] = $parentTask['Task']['id'];
+}
 
-		<li><?php echo $this->Html->link(__('List Tasks'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Tasks'), array('controller' => 'tasks', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Parent Task'), array('controller' => 'tasks', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Values'), array('controller' => 'values', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Value'), array('controller' => 'values', 'action' => 'add')); ?> </li>
-	</ul>
+?>
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-md-offset-1">
+        <h1><?php echo $headline; ?></h1>
+        <?php
+        echo $this->Form->create('Task');
+        echo $this->Form->input('name', ['placeholder' => 'název úkolu',
+            'label' => false,
+            'div' => ['class' => 'form-group'],
+            'class' => 'form-control']
+        );
+
+        echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Vytvořit úkol', array('class' => 'btn btn-primary', 'label' => 'login',));
+        echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>&nbsp;Zpět', $backLink, ['class' => 'btn btn-warning pull-right', 'escape' => false]);
+        echo $this->Form->end();
+        ?>
+    </div>
 </div>

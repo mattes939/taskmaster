@@ -1,5 +1,5 @@
 <div class="properties view">
-<h2><?php echo __('Property'); ?></h2>
+<h1><?php echo __('Property'); ?></h1>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>

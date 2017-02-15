@@ -1,0 +1,77 @@
+body{
+    padding-top: 70px;
+
+    h1{
+        font-size: 1.8em;
+    }
+    
+    ul.tree{
+
+        >li{
+            a{
+                @media(min-width: 992px){
+                    font-weight: bold;                 
+                }
+                /*margin-top: 15px;*/
+            }
+        }
+        >li:first{
+            margin-top: inherit;
+        }
+    }
+
+    ul.tree, ul.tree ul{
+        list-style-type: none;
+        padding-left: 5px;
+
+        li.active{
+            >a{
+                font-weight: bold;                
+            }
+        }
+    }
+    ul.tree ul{       
+        li{
+            a{
+                margin-top: 5px;
+            }
+            a:before{
+                content: "\25b6 \00a0";
+                color: white;    
+            }
+        }
+        li.active{
+            >a:before{
+                color: red;
+            }
+        }
+
+    }
+
+    aside{
+        overflow: hidden;
+    }
+    
+    main{
+        a.btn{
+            margin-right: 15px;
+        }
+    }
+
+    div.checkbox{
+        input[type="checkbox"]{
+            margin-left: 0;
+        }
+    }
+
+/*    ul.tree.tasklist.list-group{
+        li.list-group-item{
+            a.btn-info, a.btn-primary{
+                margin-bottom: 15px;
+                @media(min-width: 768px){
+                    margin-bottom: inherit;
+                }
+            }
+        }
+    }    */
+}

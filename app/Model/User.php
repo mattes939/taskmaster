@@ -96,46 +96,97 @@ class User extends AppModel {
             ),
             'isUnique' => array(
                 'rule' => 'isUnique',
-                'message' => 'Tento email už je používán.'
+                'message' => 'Tento email už je zaregistrován.'
             ),
         ),
     ];
 
-    public function getContacts($id) {
-        $contacts = [];
-        $taskIds = $this->TasksUser->find('all', [
-            'conditions' => [
-                'user_id' => $id,
-//                'NOT' => [
-//                    'task_id' => $currentTaskId
+//    public function getContacts($id) {
+//        $contacts = [];
+//        $taskIds = $this->TasksUser->find('all', [
+//            'conditions' => [
+//                'user_id' => $id,
+////                'NOT' => [
+////                    'task_id' => $currentTaskId
+////                ]
+//            ]
+//        ]);
+//        if (!empty($taskIds)) {
+//            $taskIds = Hash::extract($taskIds, '{n}.TasksUser.task_id');
+//
+//            $userIds = $this->TasksUser->find('all', [
+//                'conditions' => [
+//                    'task_id' => $taskIds,
+////                    'NOT' => [
+////                        'user_id' => $id
+////                    ]
 //                ]
-            ]
-        ]);
-        if (!empty($taskIds)) {
-            $taskIds = Hash::extract($taskIds, '{n}.TasksUser.task_id');
-
-            $userIds = $this->TasksUser->find('all', [
-                'conditions' => [
-                    'task_id' => $taskIds,
-//                    'NOT' => [
-//                        'user_id' => $id
+//            ]);
+//            if (!empty($userIds)) {
+//                $userIds = Hash::extract($userIds, '{n}.TasksUser.user_id');
+//                $contacts = $this->find('list', [
+//                    'conditions' => [
+//                        'id' => $userIds
+//                    ],
+//                    'order' => [
+//                        'username' => 'ASC'
 //                    ]
-                ]
-            ]);
-            if (!empty($userIds)) {
-                $userIds = Hash::extract($userIds, '{n}.TasksUser.user_id');
-                $contacts = $this->find('list', [
-                    'conditions' => [
-                        'id' => $userIds
-                    ],
-                    'order' => [
-                        'username' => 'ASC'
-                    ]
-                ]);
-            }
-        }
-//        debug($taskIds);
-        return $contacts;
-    }
+//                ]);
+//            }
+//        }
+////        debug($taskIds);
+//        return $contacts;
+//    }
 
+        /**
+     * Returns an array of users based on a task id
+     * @param string $taskId - the id of an task
+     * @return array of tasks
+     */
+    public function getUserIdsByTaskId($taskId = null) {
+        if (empty($taskId))
+            return false;
+        $users = $this->find('list', array(
+            'joins' => array(
+                array('table' => 'tasks_users',
+                    'alias' => 'TasksUser',
+                    'type' => 'INNER',
+                    'conditions' => array(
+                        'TasksUser.task_id' => $taskId,
+                        'TasksUser.user_id = User.id'
+                    )
+                )
+            ),
+            'group' => 'User.id',            
+            'order' => ['User.id' => 'ASC'],
+            'fields' => ['User.id']
+        ));        
+        return $users;
+    }
+    
+            /**
+     * Returns an array of users based on a task id
+     * @param string $taskId - the id of an task
+     * @return array of tasks
+     */
+    public function getUsersByTaskId($taskId = null) {
+        if (empty($taskId))
+            return false;
+        $users = $this->find('list', array(
+            'joins' => array(
+                array('table' => 'tasks_users',
+                    'alias' => 'TasksUser',
+                    'type' => 'INNER',
+                    'conditions' => array(
+                        'TasksUser.task_id' => $taskId,
+                        'TasksUser.user_id = User.id'
+                    )
+                )
+            ),
+            'group' => 'User.id',            
+            'order' => ['User.id' => 'ASC'],
+            'fields' => ['User.id', 'User.username']
+        ));        
+        return $users;
+    }
 }

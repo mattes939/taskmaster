@@ -1,5 +1,5 @@
 <div class="types view">
-<h2><?php echo __('Type'); ?></h2>
+<h1><?php echo __('Type'); ?></h1>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>

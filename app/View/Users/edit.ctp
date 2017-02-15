@@ -1,27 +1,36 @@
-<div class="users form">
-<?php echo $this->Form->create('User'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit User'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('username');
-		echo $this->Form->input('password');
-		echo $this->Form->input('first_name');
-		echo $this->Form->input('last_name');
-		echo $this->Form->input('telephone');
-		echo $this->Form->input('active');
-		echo $this->Form->input('Task');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-2 col-md-4">
+        <?php
+        echo $this->Form->create('User', ['class' => ['form-horizontal']]);
+        ?>
+            <legend><?php echo __('Nastavení účtu'); ?></legend>
+            <?php
+            $this->Form->inputDefaults(array(
+                'label' => false,
+                'div' => ['class' => 'form-group'],
+                'class' => 'form-control'
+                    )
+            );
+            echo $this->Form->input('id');
+            echo $this->Form->input('username', ['label' => ['class' => 'col-sm-2 control-label', 'text' => 'email'], 'disabled']);
+            echo $this->Form->input('first_name', ['label' => ['class' => 'col-sm-2 control-label', 'text' => 'jméno']]);
+            echo $this->Form->input('last_name', ['label' => ['class' => 'col-sm-2 control-label', 'text' => 'příjmení']]);
+            echo $this->Form->input('telephone', ['label' => ['class' => 'col-sm-2 control-label', 'text' => 'telefon'], 'type' => 'text']);
+            ?>
+        <?php
+        echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Uložit změny', array('class' => 'btn btn-primary'));
+        echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>&nbsp;Zrušit', ['controller' => 'tasks', 'action' => 'index'], ['class' => 'btn btn-warning pull-right', 'escape' => false]);
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), array('confirm' => __('Are you sure you want to delete # %s?', $this->Form->value('User.id')))); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Tasks'), array('controller' => 'tasks', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Task'), array('controller' => 'tasks', 'action' => 'add')); ?> </li>
-	</ul>
+        echo $this->Form->end();
+        ?>
+
+    </div>   
+</div>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-2 col-md-4">
+        <br>
+        <?php
+        echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;Změnit heslo', ['controller' => 'users', 'action' => 'changePassword'], ['class' => 'btn btn-success', 'escape' => false]);
+        ?>
+    </div>
 </div>

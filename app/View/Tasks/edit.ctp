@@ -1,27 +1,31 @@
-<div class="tasks form">
-<?php echo $this->Form->create('Task'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit Task'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-//		echo $this->Form->input('parent_id');
-		echo $this->Form->input('name');
-		echo $this->Form->input('User', ['multiple' => 'checkbox']);
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Task.id')), array('confirm' => __('Are you sure you want to delete # %s?', $this->Form->value('Task.id')))); ?></li>
-		<li><?php echo $this->Html->link(__('List Tasks'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Tasks'), array('controller' => 'tasks', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Parent Task'), array('controller' => 'tasks', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Values'), array('controller' => 'values', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Value'), array('controller' => 'values', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="row">
+    <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1">
+         <h1><?php echo '[' . $this->request->data['Task']['name'] . '] upravit atributy'; ?></h1>
+        <?php
+        echo $this->Form->create('Task', ['class' => 'form-horizontal']);
+        $this->Form->inputDefaults(array(
+            'div' => ['class' => 'form-group'],
+            'class' => 'form-control'
+                )
+        );
+        echo $this->Form->input('id');
+        
+        foreach ($this->request->data['Value'] as $i => $value){
+            echo $this->Form->input('Value.'.$i.'.id');
+            echo $this->Form->input('Value.'.$i.'.value', [
+                'label' => ['class' => 'col-sm-2 control-label', 'text' => $value['Property']['name'] ]
+                ]);
+        }
+        
+        ?>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <?php
+                echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Uložit', array('class' => 'btn btn-primary'));
+                echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>&nbsp;Zpět', ['controller' => 'tasks', 'action' => 'view', $this->request->data['Task']['id']], ['class' => 'btn btn-warning pull-right', 'escape' => false]);
+                echo $this->Form->end();
+                ?>
+            </div>
+        </div>
+    </div>
 </div>

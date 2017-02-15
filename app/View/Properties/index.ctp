@@ -1,5 +1,5 @@
 <div class="properties index">
-	<h2><?php echo __('Properties'); ?></h2>
+	<h1><?php echo __('Properties'); ?></h1>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>

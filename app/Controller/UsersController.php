@@ -17,15 +17,6 @@ class UsersController extends AppController {
      */
     public $components = array('Paginator');
 
-    /**
-     * index method
-     *
-     * @return void
-     */
-    public function index() {
-        $this->User->recursive = 0;
-        $this->set('users', $this->Paginator->paginate());
-    }
 
     /**
      * view method
@@ -48,13 +39,15 @@ class UsersController extends AppController {
      * @return void
      */
     public function add() {
+        $this->layout = 'login';
         if ($this->request->is('post')) {
             $this->User->Behaviors->attach('Tools.Passwordable', array('require' => false, 'confirm' => false));
             $this->User->create();
             if ($this->User->save($this->data)) {
-                $this->Flash->success(__('Uživatel vytvořen.'));
+                $this->Flash->success(__('Registrace proběhla úspěšně.'));
+                return $this->redirect(['action' => 'login']);
             } else {
-                $this->Flash->success(__('Chyba při ukládání uživatele.'));
+                $this->Flash->error(__('Chyba při ukládání uživatele.'));
                 unset($this->request->data['User']['pwd']);
                 //    unset($this->request->data['User']['pwd_repeat']);
             }
@@ -68,7 +61,8 @@ class UsersController extends AppController {
      * @param string $id
      * @return void
      */
-    public function edit($id = null) {
+    public function edit() {
+        $id = $this->Auth->user('id');
         if (!$this->User->exists($id)) {
             throw new NotFoundException(__('Invalid user'));
         }
@@ -109,7 +103,7 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        // $this->layout = 'login';
+         $this->layout = 'login';
         $this->User->Behaviors->attach('Tools.Passwordable');
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Auth->login()) {
@@ -128,6 +122,22 @@ class UsersController extends AppController {
         $this->Auth->logout();
         $this->layout = 'login';
         $this->redirect(array('action' => 'login'));
+    }
+    
+        public function changePassword() {
+
+        if ($this->request->is(array('post', 'put'))) {
+            $this->User->Behaviors->attach('Tools.Passwordable', array('current' => false));
+            $this->request->data['User']['id'] = $this->Session->read('Auth.User.id');
+            if ($this->User->save($this->data, array('fieldList' => array('id')))) {
+                $this->Flash->success('Heslo změněno.');
+                return $this->redirect(array('controller' => 'tasks', 'action' => 'index'));
+            } else {
+                $this->Flash->error('Chyba při změně hesla.');
+                unset($this->request->data['User']['pwd']);
+                unset($this->request->data['User']['pwd_repeat']);
+            }
+        } 
     }
 
     public function beforeFilter() {

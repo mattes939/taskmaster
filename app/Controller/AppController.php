@@ -47,7 +47,7 @@ class AppController extends Controller {
 
         $this->_authorize();
 
-//        $this->layout = 'front';
+        $this->layout = 'front';
     }
 
     protected function _authorize() {
@@ -80,4 +80,12 @@ class AppController extends Controller {
         ));
     }
 
+    protected function _isAuthorized($users = null){
+        $return = true;
+        if(!empty($users)){
+            $return = in_array($this->Auth->user('id'), $users);
+        }
+        
+        return $return;
+    }
 }
