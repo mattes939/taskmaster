@@ -106,7 +106,7 @@ class TasksController extends AppController {
 
             if ($saved) {
                 $this->Flash->success(__('Úkol byl vytvořen.'));
-                return $this->redirect($this->referer());
+                return $this->redirect(['action' => 'view', $this->Task->id]);
             } else {
                 $this->Flash->error(__('The task could not be saved. Please, try again.'));
             }

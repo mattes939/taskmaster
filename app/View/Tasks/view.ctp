@@ -74,10 +74,10 @@
             <table class="table table-bordered table-condensed table-responsive">
                 <thead>
                     <tr>
-                        <th>email</th>
-                        <th>jméno</th>
-                        <th>příjmení</th>
-                        <th>telefon</th>                    
+                        <th>eEmail</th>
+                        <th>Jméno</th>
+                        <th>Příjmení</th>
+                        <th>Telefon</th>                    
                     </tr>
                 </thead>
                 <tbody>
