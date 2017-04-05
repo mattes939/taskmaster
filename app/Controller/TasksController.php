@@ -10,7 +10,7 @@ App::uses('AppController', 'Controller');
  */
 class TasksController extends AppController {
 
-    public $helpers = ['Tools.Tree'];
+    public $helpers = ['Tools.Tree', 'Time'];
 
     /**
      * Components
@@ -45,6 +45,20 @@ class TasksController extends AppController {
             throw new ForbiddenException(__('Nemáte oprávnění k tomuto úkolu'));
         }
 
+        if ($this->request->is(array('post', 'put'))) {
+//            debug($this->request->data);
+            if (!empty($this->request->data['Comment'])) {
+                $this->request->data['Comment']['task_id'] = $id;
+                $this->request->data['Comment']['user_id'] = $this->Auth->user('id');
+                if ($this->Task->Comment->save($this->request->data)) {
+                    $this->Flash->success(__('Komentář byl přidán.'));
+                    return $this->redirect(array('action' => 'view', $id));
+                } else {
+                    $this->Flash->error(__('Chyba při ukládání komentáře.'));
+                }
+            }
+        }
+
         $task = $this->Task->find('first', [
             'conditions' => [
                 'Task.id' => $id,
@@ -60,7 +74,7 @@ class TasksController extends AppController {
                 'Value' => [
                     'fields' => ['value', 'property_id'],
                     'Property' => [
-                        'fields' => ['name']
+                        'fields' => ['name', 'type_id']
                     ]
                 ],
                 'ParentTask' => [
@@ -68,6 +82,12 @@ class TasksController extends AppController {
                     'User' => [
                         'fields' => ['id']
                     ]
+                ],
+                'Comment' => [
+                    'order' => ['modified' => 'asc'],
+                    'User' => [
+                        'fields' => ['id', 'username', 'first_name', 'last_name']
+                    ],
                 ]
             ],
             'order' => [
@@ -78,11 +98,11 @@ class TasksController extends AppController {
         $path = $this->Task->getPath($id, ['id', 'lft', 'rght', 'parent_id', 'name']);
 
         $root = $path[0]['Task'];
-        
+
         $tree = $this->Task->getTasksByUserId($this->Auth->user('id'), $root);
-        
+
         $canDetach = count($tree[0]['User']) > 1 && count($task['User']) > 1;
-        
+
         $this->set(compact('task', 'tree', 'root', 'canDetach'));
     }
 
@@ -151,7 +171,7 @@ class TasksController extends AppController {
                         'id', 'task_id', 'property_id', 'value'
                     ],
                     'Property' => [
-                        'id', 'name'
+                        'id', 'name', 'type_id'
                     ]
                 ]
             ]
@@ -269,8 +289,6 @@ class TasksController extends AppController {
         } else {
             $this->Flash->error(__('The task could not be detached from. Please, try again.'));
         }
-        
     }
-
 
 }

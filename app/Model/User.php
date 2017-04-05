@@ -9,8 +9,7 @@ App::uses('AppModel', 'Model');
  * @property Task $Task
  */
 class User extends AppModel {
-    
-        /**
+    /**
      * Virtual fields
      *
      * @var string
@@ -34,21 +33,21 @@ class User extends AppModel {
      *
      * @var array
      */
-//    public $hasMany = array(
-//        'Task' => array(
-//            'className' => 'Task',
-//            'foreignKey' => 'user_id',
-//            'dependent' => false,
-//            'conditions' => '',
-//            'fields' => '',
-//            'order' => '',
-//            'limit' => '',
-//            'offset' => '',
-//            'exclusive' => '',
-//            'finderQuery' => '',
-//            'counterQuery' => ''
-//        )
-//    );
+    public $hasMany = array(
+        'Comment' => array(
+            'className' => 'Comment',
+            'foreignKey' => 'task_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
+    );
 
     /**
      * hasAndBelongsToMany associations
@@ -138,7 +137,7 @@ class User extends AppModel {
 //        return $contacts;
 //    }
 
-        /**
+    /**
      * Returns an array of users based on a task id
      * @param string $taskId - the id of an task
      * @return array of tasks
@@ -157,14 +156,14 @@ class User extends AppModel {
                     )
                 )
             ),
-            'group' => 'User.id',            
+            'group' => 'User.id',
             'order' => ['User.id' => 'ASC'],
             'fields' => ['User.id']
-        ));        
+        ));
         return $users;
     }
-    
-            /**
+
+    /**
      * Returns an array of users based on a task id
      * @param string $taskId - the id of an task
      * @return array of tasks
@@ -183,10 +182,11 @@ class User extends AppModel {
                     )
                 )
             ),
-            'group' => 'User.id',            
+            'group' => 'User.id',
             'order' => ['User.id' => 'ASC'],
             'fields' => ['User.id', 'User.username']
-        ));        
+        ));
         return $users;
     }
+
 }

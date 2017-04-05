@@ -80,6 +80,19 @@ class Task extends AppModel {
             'finderQuery' => '',
             'counterQuery' => ''
         ),
+        'Comment' => array(
+            'className' => 'Comment',
+            'foreignKey' => 'task_id',
+            'dependent' => false,
+            'conditions' => '',
+            'fields' => '',
+            'order' => '',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => ''
+        ),
     );
 
     /**

@@ -17,31 +17,29 @@ class ValuesController extends AppController {
      */
     public $components = array('Paginator');
 
-
     /**
      * add method
      *
      * @return void
      */
-    public function add($taskId = null) {
+    public function add($taskId = null, $typeId = 1) {
         if ($this->request->is('post')) {
             $attribute['Property'] = $this->request->data['Property'];
+            $attribute['Property']['type_id'] = $typeId;
             $attribute['Value'][0] = $this->request->data['Value'];
             $attribute['Value'][0]['task_id'] = $taskId;
 
             if ($this->Value->Property->saveAttribute($attribute)) {
-                $this->Flash->error(__('Atribut vložen.'));
+                $this->Flash->success(__('Atribut vložen.'));
                 return $this->redirect(array('controller' => 'tasks', 'action' => 'view', $taskId));
             } else {
                 $this->Flash->error(__('The value could not be saved. Please, try again.'));
             }
-        } else{
+        } else {
             $task = $this->Value->Task->findById($taskId);
-            $this->set(compact('task'));
+            $this->set(compact('task', 'typeId'));
         }
     }
-
-
 
     /**
      * delete method

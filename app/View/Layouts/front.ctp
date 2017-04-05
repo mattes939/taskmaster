@@ -20,6 +20,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->meta('icon');
 
         echo $this->Html->css([
+            '../datepicker/datepicker3.css',
             'style'
         ]);
 
@@ -53,6 +54,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/cr-1.3.2/fc-3.2.2/fh-3.1.2/kt-2.2.0/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
         <?php
         echo $this->Html->script([
+            '../datepicker/bootstrap-datepicker.js',
+            '../datepicker/locales/bootstrap-datepicker.cs.js',
             'misc'
         ]);
         ?>

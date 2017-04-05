@@ -21,7 +21,7 @@
         if ($canDetach) {
             echo $this->Form->postLink(
                     '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Přestat sledovat', array('action' => 'detachUser', $task['Task']['id']), array(
-                'confirm' => __('Opravdu chcete zrušit Vaše přiřazení k úkolu "%s" a všem nadřazeným a  podřazeným úkolům?', $task['Task']['name']),
+                'confirm' => __('Opravdu chcete zrušit Vaše přiřazení k úkolu "%s" a všem nadřazeným a podřazeným úkolům?', $task['Task']['name']),
                 'class' => 'btn btn-warning', 'escape' => false
                     )
             );
@@ -46,21 +46,46 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($task['Value'] as $value): ?>
+                    <?php
+                    foreach ($task['Value'] as $value) {
+                        switch ($value['Property']['type_id']) {
+                            case 3:
+                                if ($value['value'] == 1) {
+                                    $shownValue = '<span class="glyphicon glyphicon-ok text-success"></span>';
+                                } else {
+                                    $shownValue = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+                                }
+                                break;
+                            case 4:
+                                $shownValue = $this->Time->format($value['value'], '%e. %-m. %Y');
+                                break;
+                            default :
+                                $shownValue = $value['value'];
+                                break;
+                        }
+                        ?>
                         <tr>
                             <td><?php echo $value['Property']['name']; ?></td>
-                            <td><?php echo $value['value']; ?></td>   
+                            <td><?php echo $shownValue; ?></td>   
                         </tr>
-                    <?php endforeach; ?>
+                    <?php } ?>
                 </tbody>
             </table>
             <?php
-        }
-        else {
+        } else {
             echo '<br><br>';
         }
         echo $this->Html->link(
-                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Nový atribut', ['controller' => 'values', 'action' => 'add', $task['Task']['id']], ['class' => 'btn btn-success', 'escape' => false]
+                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Nový text', ['controller' => 'values', 'action' => 'add', $task['Task']['id'], 1], ['class' => 'btn btn-success', 'escape' => false]
+        );
+        echo $this->Html->link(
+                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Nové číslo', ['controller' => 'values', 'action' => 'add', $task['Task']['id'], 2], ['class' => 'btn btn-success', 'escape' => false]
+        );
+        echo $this->Html->link(
+                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Nový boolean', ['controller' => 'values', 'action' => 'add', $task['Task']['id'], 3], ['class' => 'btn btn-success', 'escape' => false]
+        );
+        echo $this->Html->link(
+                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Nové datum', ['controller' => 'values', 'action' => 'add', $task['Task']['id'], 4], ['class' => 'btn btn-success', 'escape' => false]
         );
         if (!empty($task['Value'])) {
             echo $this->Html->link(
@@ -74,7 +99,7 @@
             <table class="table table-bordered table-condensed table-responsive">
                 <thead>
                     <tr>
-                        <th>eEmail</th>
+                        <th>Email</th>
                         <th>Jméno</th>
                         <th>Příjmení</th>
                         <th>Telefon</th>                    
@@ -92,6 +117,31 @@
                 </tbody>
             </table>
         <?php endif; ?>
+        <h3>Komentáře</h3>
+        <?php
+        if (!empty($task['Comment'])) {
+            foreach ($task['Comment'] as $comment) {
+                ?>
+                <div class="well well-sm">
+                    <?php
+                    echo '<h4><i><small>' . $this->Time->format($comment['modified'], '%e. %-m. %Y %k:%M') . '</i></small> ' . $comment['User']['first_name'] . ' ' . $comment['User']['last_name'] . '</h4>';
+                    echo '<p>' . $comment['content'] . '</p>';
+                    ?></div><?php
+                }
+            } else {
+                echo '<i>K tomuto úkolu nebyly zatím vloženy žádné komentáře.</i>';
+            }
+            echo $this->Form->create('Comment');
+            $this->Form->inputDefaults(array(
+                'div' => ['class' => 'form-group'],
+                'class' => 'form-control'
+                    )
+            );
+            echo $this->Form->input('content', ['label' => 'Napsat komentář']);
+            echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Odeslat', array('class' => 'btn btn-primary'));
+            echo $this->Form->end();
+            ?>
+        <br>
     </main>
 </div>
 
