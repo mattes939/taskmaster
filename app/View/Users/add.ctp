@@ -9,8 +9,8 @@
             'class' => 'form-control'
                 )
         );
-        echo $this->Form->input('username', array('autofocus' => 'autofocus', 'placeholder' => 'email', 'type' => 'email'));
-        echo $this->Form->input('pwd', array('placeholder' => 'heslo'));
+        echo $this->Form->input('username', array('autofocus' => 'autofocus', 'placeholder' => 'email', 'type' => 'email', 'required'));
+        echo $this->Form->input('pwd', array('placeholder' => 'heslo', 'type' => 'password', 'required'));
         echo $this->Form->input('first_name', ['placeholder' => 'jméno']);
         echo $this->Form->input('last_name', ['placeholder' => 'příjmení']);
         echo $this->Form->input('telephone', ['placeholder' => 'telefon']);

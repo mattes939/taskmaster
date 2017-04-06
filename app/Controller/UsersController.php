@@ -17,7 +17,6 @@ class UsersController extends AppController {
      */
     public $components = array('Paginator');
 
-
     /**
      * view method
      *
@@ -67,6 +66,9 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            if (isset($this->request->data['User']['email'])) {
+                unset($this->request->data['User']['email']);
+            }
             if ($this->User->save($this->request->data)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(array('action' => 'index'));
@@ -103,7 +105,7 @@ class UsersController extends AppController {
     }
 
     public function login() {
-         $this->layout = 'login';
+        $this->layout = 'login';
         $this->User->Behaviors->attach('Tools.Passwordable');
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->Auth->login()) {
@@ -123,8 +125,8 @@ class UsersController extends AppController {
         $this->layout = 'login';
         $this->redirect(array('action' => 'login'));
     }
-    
-        public function changePassword() {
+
+    public function changePassword() {
 
         if ($this->request->is(array('post', 'put'))) {
             $this->User->Behaviors->attach('Tools.Passwordable', array('current' => false));
@@ -137,7 +139,7 @@ class UsersController extends AppController {
                 unset($this->request->data['User']['pwd']);
                 unset($this->request->data['User']['pwd_repeat']);
             }
-        } 
+        }
     }
 
     public function beforeFilter() {
