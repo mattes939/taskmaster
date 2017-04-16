@@ -5,8 +5,17 @@ $(document).ready(function () {
 
     $('form.form-horizontal input[type="text"].form-control').wrap('<div class="col-sm-10"></div>');
     $('form.form-horizontal input[type="number"].form-control').wrap('<div class="col-sm-10"></div>');
+    $('form.form-horizontal select.form-control').wrap('<div class="col-sm-10"></div>');
+    $('form.form-horizontal textarea.form-control').wrap('<div class="col-sm-10"></div>');
     $('form.form-horizontal input[type="password"].form-control').wrap('<div class="col-sm-8"></div>');
     $('table.table').wrap('<div class="table-responsive"></div>');
+
+    $('#PropertyTypeId').click(function () {
+        if ($('#PropertyTypeId option:selected').val() == 5) {
+            $('#selectOptions').toggle();
+        }
+
+    });
 
     $('.datepicker').datepicker({
         autoclose: true,

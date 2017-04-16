@@ -21,6 +21,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->meta('icon');
 
         echo $this->Html->css([
+//            '../datepicker/datepicker3.css',
+            'style'
         ]);
 
         echo $this->fetch('meta');

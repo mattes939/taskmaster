@@ -46,7 +46,7 @@ class UsersController extends AppController {
                 $this->Flash->success(__('Registrace proběhla úspěšně.'));
                 return $this->redirect(['action' => 'login']);
             } else {
-                $this->Flash->error(__('Chyba při ukládání uživatele.'));
+                $this->Flash->error(__('Chyba při vytváření uživatele.'));
                 unset($this->request->data['User']['pwd']);
                 //    unset($this->request->data['User']['pwd_repeat']);
             }

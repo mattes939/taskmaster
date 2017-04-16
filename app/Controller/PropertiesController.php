@@ -103,6 +103,6 @@ class PropertiesController extends AppController {
 		} else {
 			$this->Flash->error(__('The property could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect($this->referer());
 	}
 }

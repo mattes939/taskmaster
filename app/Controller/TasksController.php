@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 App::uses('AppController', 'Controller');
 
@@ -63,7 +63,7 @@ class TasksController extends AppController {
             'conditions' => [
                 'Task.id' => $id,
             ],
-            'fields' => ['id', 'lft', 'rght', 'name', 'author_id', 'parent_id'],
+            'fields' => ['id', 'lft', 'rght', 'name', 'author_id', 'parent_id', 'description'],
             'contain' => [
                 'User' => [
                     'fields' => ['id', 'username', 'first_name', 'last_name', 'telephone']
@@ -72,9 +72,9 @@ class TasksController extends AppController {
                     'fields' => ['id', 'username', 'first_name', 'last_name']
                 ],
                 'Value' => [
-                    'fields' => ['value', 'property_id'],
+                    'fields' => ['value', 'property_id', 'id'],
                     'Property' => [
-                        'fields' => ['name', 'type_id']
+                        'fields' => ['name', 'type_id', 'id']
                     ]
                 ],
                 'ParentTask' => [
@@ -182,6 +182,7 @@ class TasksController extends AppController {
         }
 
         if ($this->request->is(array('post', 'put'))) {
+//            debug($this->request->data);die;
             if ($this->Task->saveAll($this->request->data)) {
                 $this->Flash->success(__('Změny byly uloženy.'));
                 return $this->redirect(array('action' => 'view', $id));

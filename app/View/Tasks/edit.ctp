@@ -1,4 +1,25 @@
 <div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-md-offset-1">
+        <h1><?php echo '[' . $this->request->data['Task']['name'] . '] upravit popis'; ?></h1>
+        <?php
+        echo $this->Form->create('Task');
+        echo $this->Form->input('id');
+//        echo $this->Form->input('name', ['placeholder' => 'název úkolu',
+//            'label' => false,
+//            'div' => ['class' => 'form-group'],
+//            'class' => 'form-control']
+//        );
+        echo $this->Form->input('description', ['label' => 'Popis',
+        'div' => ['class' => 'form-group'],
+        'class' => 'form-control'
+        ]);
+         echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Uložit', array('class' => 'btn btn-primary'));
+                echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>&nbsp;Zpět', ['controller' => 'tasks', 'action' => 'view', $this->request->data['Task']['id']], ['class' => 'btn btn-warning pull-right', 'escape' => false]);
+        echo $this->Form->end();
+        ?>
+    </div>
+</div>
+<!--<div class="row">
     <div class="col-xs-12 col-md-10 col-lg-10 col-md-offset-1">
         <h1><?php echo '[' . $this->request->data['Task']['name'] . '] upravit atributy'; ?></h1>
         <?php
@@ -54,4 +75,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->

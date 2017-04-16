@@ -1,12 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Type Model
+ * Processing Model
  *
- * @property Property $Property
- * @property Processing $Processing
+ * @property Value $Value
+ * @property Type $Type
  */
-class Type extends AppModel {
+class Processing extends AppModel {
 
 /**
  * Display field
@@ -24,9 +24,9 @@ class Type extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'Property' => array(
-			'className' => 'Property',
-			'foreignKey' => 'type_id',
+		'Value' => array(
+			'className' => 'Value',
+			'foreignKey' => 'processing_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
@@ -46,11 +46,11 @@ class Type extends AppModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'Processing' => array(
-			'className' => 'Processing',
+		'Type' => array(
+			'className' => 'Type',
 			'joinTable' => 'processings_types',
-			'foreignKey' => 'type_id',
-			'associationForeignKey' => 'processing_id',
+			'foreignKey' => 'processing_id',
+			'associationForeignKey' => 'type_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
