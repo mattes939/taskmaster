@@ -17,6 +17,19 @@ $(document).ready(function () {
 
     });
 
+    if ($('#ValueProcessingId1').attr('checked') !== 'checked') {
+        $('#customValueWrapper').hide();
+    }
+
+    $('#processingWrapper input:radio').click(function () {
+        if (this.value == 1) {
+            $('#customValueWrapper').show();
+        } else {
+            $('#customValueWrapper').hide();
+        }
+    });
+
+
     $('.datepicker').datepicker({
         autoclose: true,
         language: 'cs',

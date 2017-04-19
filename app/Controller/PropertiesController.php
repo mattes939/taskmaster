@@ -99,7 +99,7 @@ class PropertiesController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Property->delete()) {
-			$this->Flash->success(__('The property has been deleted.'));
+			$this->Flash->success(__('Atribut byl smazán.'));
 		} else {
 			$this->Flash->error(__('The property could not be deleted. Please, try again.'));
 		}

@@ -5,7 +5,7 @@
     </div>
 </div>
 <div class="row">
-   <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 col-md-offset-1">
+   <div class="col-xs-12 col-sm-8 col-md-6 col-lg-8 col-md-offset-1">
         <?php echo $this->Form->create('Value', ['class' => '']);
 //        $this->Form->inputDefaults(array(
 //            'div' => ['class' => 'form-group'],
@@ -14,10 +14,10 @@
 //        );
             echo $this->Form->input('id');
 
-            echo $this->Form->input('processing_id', ['type' => 'radio', 'options' => $processing, 'legend' => false]);
+            echo $this->Form->input('processing_id', ['type' => 'radio', 'options' => $processing, 'legend' => false, 'div' => ['class' => 'radio', 'id' => 'processingWrapper']]);
             
             
-            $options = ['label' => 'manuální zadání hodnoty','div' => ['class' => 'form-group'],
+            $options = ['label' => 'manuální zadání hodnoty','div' => ['class' => 'form-group', 'id' => 'customValueWrapper'],
             'class' => 'form-control'];
             switch ($this->request->data['Property']['type_id']) {
                 case 1: $options['type'] = 'text';
@@ -29,8 +29,8 @@
                     $options['options'] = [1 => 'ano', 0 => 'ne'];
                     $options['class'] = '';
                     $options['label'] = 'manuální zadání hodnoty';
-                    $options['div'] = ['class' => 'radio'];
-                    echo '<label class="col-sm-2 control-label">'.$this->request->data['Property']['name'].'&nbsp;&nbsp;</label>';
+                    $options['div'] = ['class' => 'radio', 'id' => 'customValueWrapper'];
+//                    echo '<label class="control-label">'.$this->request->data['Property']['name'].'&nbsp;&nbsp;</label>';
                     break;
                 case 4: $options['type'] = 'text';
                     $options['class'] = 'form-control datepicker';

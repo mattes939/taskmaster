@@ -1,25 +1,23 @@
-<div class="comments form">
-<?php echo $this->Form->create('Comment'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit Comment'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('task_id');
-		echo $this->Form->input('user_id');
-		echo $this->Form->input('content');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<div class="row">
+    <div class="col-xs-12 ">
+        <h1>[<?php echo $task['Task']['name'] . '] - editace komentáře'; ?></h1>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Comment.id')), array('confirm' => __('Are you sure you want to delete # %s?', $this->Form->value('Comment.id')))); ?></li>
-		<li><?php echo $this->Html->link(__('List Comments'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Tasks'), array('controller' => 'tasks', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Task'), array('controller' => 'tasks', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-lg-8 col-md-offset-1">
+        <?php
+        echo $this->Form->create('Comment');
+        $this->Form->inputDefaults(array(
+            'div' => ['class' => 'form-group'],
+            'class' => 'form-control'
+                )
+        );
+        echo $this->Form->input('id');
+        echo $this->Form->input('content', ['label' => 'Upravit komentář']);
+        echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Uložit', array('class' => 'btn btn-primary'));
+        echo $this->Html->link('<span class="glyphicon glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>&nbsp;Zpět', ['controller' => 'tasks', 'action' => 'view', $task['Task']['id']], ['class' => 'btn btn-warning ', 'escape' => false]);
+        echo $this->Form->end();
+        ?>
+    </div>
 </div>

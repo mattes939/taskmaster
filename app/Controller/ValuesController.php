@@ -44,7 +44,7 @@ class ValuesController extends AppController {
                 $this->Flash->success(__('Atribut vložen.'));
                 return $this->redirect(array('controller' => 'tasks', 'action' => 'view', $taskId));
             } else {
-                $this->Flash->error(__('The value could not be saved. Please, try again.'));
+                $this->Flash->error(__('Chyba při ukládání atributu.'));
             }
         } else {
             $task = $this->Value->Task->findById($taskId);
@@ -78,17 +78,21 @@ class ValuesController extends AppController {
                 ]
             ]
         ]);
-
+//debug($value);
         if ($this->request->is(array('post', 'put'))) {
-            
-            $this->Value->updateParentTaskValues($value['Task']['parent_id'], $value['Property']['id'], $value['Property']['type_id']);
-            //po testování přehodit za save
+//            $this->request->data['Value']['task_id'] = $value['Value']['task_id'];
+//            $this->request->data['Value']['property_id'] = $value['Value']['property_id'];
+//          debug($this->request->data);die;
+          if($this->request->data['Value']['processing_id'] != 1){
+              unset($this->request->data['Value']['value']);
+          }
             if ($this->Value->save($this->request->data)) {
-                
-                $this->Flash->success(__('The value has been saved.'));
+                $this->Value->updateParentTaskValues($value['Task']['parent_id'], $value['Property']['id'], $value['Property']['type_id']);
+                $this->Value->updateCurrentTaskValues($value['Value']['id'], $value['Task']['id'], $value['Property']['id'], $this->request->data['Value']['processing_id']);
+                $this->Flash->success(__('Atribut uložen.'));
                 return $this->redirect(array('controller' => 'tasks', 'action' => 'view', $value['Task']['id']));
             } else {
-                $this->Flash->error(__('The value could not be saved. Please, try again.'));
+                $this->Flash->error(__('Chyba při ukládání atributu.'));
             }
         } else {
             if ($value['Property']['type_id'] == 5) {

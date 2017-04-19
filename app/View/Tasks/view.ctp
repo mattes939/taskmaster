@@ -10,6 +10,15 @@
     </aside>
     <main class="col-xs-12 col-sm-8 col-md-9 col-lg-10">
         <h1><?php echo h($task['Task']['name']); ?></h1>
+        <p>Nadřazený úkol: 
+            <?php
+            if (!empty($task['ParentTask']['name'])) {
+                echo '<strong style="padding-right: 15px;">' . $this->Html->link($task['ParentTask']['name'], ['controller' => 'tasks', 'action' => 'view', $task['ParentTask']['id']]) . '</strong>';
+                echo $this->Html->link('<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;změnit', ['controller' => 'tasks', 'action' => 'changeParent', $task['Task']['id']], ['class' => 'btn btn-primary btn-xs', 'escape' => false,]);
+            } else {
+                echo '<i>(žádný)</i>';
+            }
+            ?></p>
         <?php
         printf('<p>Vytvořil: %s %s (%s)</p>', $task['Author']['first_name'], $task['Author']['last_name'], $task['Author']['username']);
         $descButton = 'Vložit popis';
@@ -54,6 +63,7 @@
                     <tr>
                         <th>Atribut</th>
                         <th>Hodnota</th>
+                        <th>Druh zadání</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -62,13 +72,10 @@
                     foreach ($task['Value'] as $value) {
                         $shownName = $value['Property']['name'];
                         $shownValue = $value['value'];
+//                        debug($value['value']);
                         switch ($value['Property']['type_id']) {
                             case 3:
-                                if ($value['value'] == 1) {
-                                    $shownValue = '<span class="glyphicon glyphicon-ok text-success"></span>';
-                                } elseif($value['value'] === 0) {
-                                    $shownValue = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-                                }
+                                $shownValue = str_replace(['0', '1'], ['<span class="glyphicon glyphicon-remove text-danger"></span>', '<span class="glyphicon glyphicon-ok text-success"></span>'], $shownValue);
                                 break;
                             case 4:
                                 $shownValue = $this->Time->format($value['value'], '%e. %-m. %Y');
@@ -80,7 +87,8 @@
                         ?>
                         <tr>
                             <td><?php echo $shownName; ?></td>
-                            <td><?php echo $shownValue; ?></td>   
+                            <td><?php echo $shownValue; ?></td>
+                            <td><?php echo $value['Processing']['name']; ?></td>
                             <td class="text-right">
                                 <?php
                                 echo $this->Html->link('<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', array('controller' => 'values', 'action' => 'edit', $value['id']), ['class' => 'btn btn-primary', 'escape' => false]);
@@ -145,7 +153,13 @@
                 ?>
                 <div class="well well-sm bg-info">
                     <?php
-                    echo '<h4>' . $comment['User']['first_name'] . ' ' . $comment['User']['last_name'] . ' (' . $this->Time->format($comment['modified'], '%e. %-m. %Y %k:%M') . ')' . '</h4>';
+                    $editButton = '';
+                    if ($comment['User']['id'] == $this->Session->read('Auth.User.id')) {
+                        $editButton = $this->Html->link(
+                                '&nbsp;<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', ['controller' => 'comments', 'action' => 'edit', $comment['id']], ['class' => 'btn btn-default pull-right', 'escape' => false]
+                        );
+                    }
+                    echo '<h4>' . $comment['User']['first_name'] . ' ' . $comment['User']['last_name'] . ' (' . $this->Time->format($comment['modified'], '%e. %-m. %Y %k:%M') . ')' . $editButton . '</h4>';
                     echo '<p>' . $comment['content'] . '</p>';
                     ?></div><?php
             }
@@ -159,7 +173,7 @@
                 )
         );
         echo $this->Form->input('content', ['label' => 'Napsat komentář']);
-        echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Uložit', array('class' => 'btn btn-primary'));
+        echo $this->Form->button('<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Vložit komentář', array('class' => 'btn btn-primary'));
         echo $this->Form->end();
         ?>
         <br>

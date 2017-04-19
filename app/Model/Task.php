@@ -307,4 +307,24 @@ class Task extends AppModel {
         return $this->TasksUser->deleteAll(['TasksUser.task_id' => array_merge($pathIds, $childrenIds), 'TasksUser.user_id' => $userId], false);
     }
 
+    public function synchronizeAttributes($id = null, $parentId = null) {
+        $currentAttributes = $this->Value->find('list', [
+            'conditions' => ['task_id' => $id],
+            'fields' => ['property_id']
+        ]);
+        $parentAttributes = $this->Value->find('list', [
+            'conditions' => ['task_id' => $parentId],
+            'fields' => ['property_id']
+        ]);
+        $missingAttributes = array_diff($parentAttributes, $currentAttributes);
+        if (!empty($missingAttributes)) {
+            $values = [];
+            foreach ($missingAttributes as $i =>$missingAttribute) {
+                $values[$i]['Value']['property_id'] = $missingAttribute;
+                $values[$i]['Value']['task_id'] = $id;
+            }
+            $this->Value->saveAll($values);
+        }
+    }
+
 }

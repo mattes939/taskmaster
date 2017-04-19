@@ -1,5 +1,4 @@
 ﻿<?php
-
 App::uses('AppController', 'Controller');
 
 /**
@@ -75,10 +74,13 @@ class TasksController extends AppController {
                     'fields' => ['value', 'property_id', 'id'],
                     'Property' => [
                         'fields' => ['name', 'type_id', 'id']
+                    ],
+                    'Processing' => [
+                        'fields' => ['id', 'name']
                     ]
                 ],
                 'ParentTask' => [
-                    'fields' => ['id'],
+                    'fields' => ['id', 'name'],
                     'User' => [
                         'fields' => ['id']
                     ]
@@ -290,6 +292,57 @@ class TasksController extends AppController {
         } else {
             $this->Flash->error(__('The task could not be detached from. Please, try again.'));
         }
+    }
+
+    public function changeParent($id = null) {
+        if (!$this->Task->exists($id)) {
+            throw new NotFoundException(__('Invalid task'));
+        }
+        $options = array(
+            'conditions' => array(
+                'Task.' . $this->Task->primaryKey => $id
+            ),
+            'contain' => [
+                'User' => [
+                    'fields' => 'id'
+                ],
+            ]
+        );
+        $task = $this->Task->find('first', $options);
+        if (!$this->_isAuthorized(Hash::extract($task['User'], '{n}.id'))) {
+            throw new ForbiddenException(__('Nemáte oprávnění k úpravě tohoto úkolu'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+//            debug($this->request->data);die;
+            if ($this->Task->saveAll($this->request->data)) {
+                $this->Task->synchronizeAttributes($id, $this->request->data['Task']['parent_id']);
+                $this->Flash->success(__('Změny byly uloženy.'));
+                return $this->redirect(array('action' => 'view', $id));
+            } else {
+                $this->Flash->error(__('The task could not be saved. Please, try again.'));
+            }
+        } else {
+
+            $this->request->data = $task;
+        }
+        $myTaskIds = $this->Task->getTaskIdsByUserId($this->Auth->user('id'));
+        unset($myTaskIds[$id]);
+//        debug($myTaskIds);
+        
+        $path = $this->Task->getPath($id, ['id', 'lft', 'rght', 'parent_id', 'name']);
+
+        $root = $path[0]['Task'];
+        
+        
+        $parents = $this->Task->generateTreeList([
+            'id' => $myTaskIds,
+//            'NOT' => [
+                'lft >=' => $root['lft'],
+                'rght <=' => $root['rght']
+//            ]
+                ], null, null, '-> ');
+        $this->set(compact('parents'));
     }
 
 }
