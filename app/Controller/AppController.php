@@ -77,6 +77,7 @@ class AppController extends Controller {
             'sitemap',
             'login',
             'logout',
+            'resetPassword'
         ));
     }
 

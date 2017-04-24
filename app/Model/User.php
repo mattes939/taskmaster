@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppModel', 'Model');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * User Model
@@ -187,6 +188,38 @@ class User extends AppModel {
             'fields' => ['User.id', 'User.username']
         ));
         return $users;
+    }
+
+    public function resetPassword($username) {
+        $user = $this->find('first', [
+            'conditions' => [
+                'username' => $username
+            ],
+            'fields' => ['id', 'username']
+        ]);
+        if (!empty($user)) {
+            $password = $this->generateRandomString();
+            $user['User']['pwd'] = $password;
+            $this->Behaviors->attach('Tools.Passwordable', array('require' => false, 'confirm' => false));
+            if ($this->save($user)) {
+                $email = new CakeEmail();
+                $email->config(array(
+                    'from' => 'daemon@taskmater.cz',
+                    'to' => $username,
+                    'subject' => 'Taskmaster - obnovení hesla',
+                    'emailFormat' => 'html',
+                    'template' => 'reset_password',
+                    'viewVars' => ['password' => $password],
+//                'bcc' => 'matejek@tvorime-weby.cz'
+                ));
+                $email->send();
+                return TRUE;
+            } else {
+                return false;
+            }
+        } else {
+            return FALSE;
+        }
     }
 
 }
